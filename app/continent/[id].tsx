@@ -36,7 +36,17 @@ export default function ContinentScreen() {
     return result;
   }, [countries, countryStats, t]);
 
-  if (!continent) return null;
+  if (!continent) {
+    return (
+      <View className="flex-1 bg-background items-center justify-center px-xl" style={{ paddingTop: insets.top }}>
+        <Header title={t("common.notFound")} showBack />
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-h2 text-text-primary mb-sm">{t("common.notFound")}</Text>
+          <Text className="text-body text-text-secondary text-center">{t("common.notFoundDescription")}</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>

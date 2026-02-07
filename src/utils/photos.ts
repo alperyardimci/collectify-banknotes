@@ -14,19 +14,25 @@ export function ensurePhotoDir(): void {
 
 export function savePhoto(uri: string): string {
   ensurePhotoDir();
-  const extension = uri.split(".").pop() || "jpg";
-  const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${extension}`;
-  const sourceFile = new File(uri);
-  const targetDir = getPhotoDirectory();
-  const sourceName = sourceFile.uri.split("/").pop() || "photo";
-  sourceFile.copy(targetDir);
-  // Rename to our unique filename
-  const copiedFile = new File(targetDir, sourceName);
-  const finalFile = new File(targetDir, filename);
-  if (copiedFile.uri !== finalFile.uri) {
-    copiedFile.move(finalFile);
+  try {
+    const extension = uri.split(".").pop() || "jpg";
+    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${extension}`;
+    const sourceFile = new File(uri);
+    const targetDir = getPhotoDirectory();
+    const sourceName = sourceFile.uri.split("/").pop() || "photo";
+    sourceFile.copy(targetDir);
+    // Rename to our unique filename
+    const copiedFile = new File(targetDir, sourceName);
+    const finalFile = new File(targetDir, filename);
+    if (copiedFile.uri !== finalFile.uri) {
+      copiedFile.move(finalFile);
+    }
+    return finalFile.uri;
+  } catch (error) {
+    throw new Error(
+      `Failed to save photo: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
   }
-  return finalFile.uri;
 }
 
 export function deletePhoto(uri: string): void {

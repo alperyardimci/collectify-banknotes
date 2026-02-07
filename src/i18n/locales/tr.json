@@ -251,7 +251,8 @@
     "cancel": "\u0130ptal",
     "camera": "Kamera",
     "gallery": "Galeri",
-    "changePhoto": "De\u011fi\u015ftir"
+    "changePhoto": "De\u011fi\u015ftir",
+    "saveError": "Kaydederken bir sorun olu\u015ftu. L\u00fctfen tekrar deneyin."
   },
   "validation": {
     "denominationRequired": "L\u00fctfen kup\u00fcr\u00fc girin",
@@ -267,6 +268,10 @@
     "turkish": "T\u00fcrk\u00e7e",
     "permissionDenied": "\u0130zin Reddedildi",
     "cameraPermission": "Foto\u011fraf \u00e7ekmek i\u00e7in kamera izni gerekli.",
-    "galleryPermission": "Foto\u011fraf se\u00e7mek i\u00e7in galeri izni gerekli."
+    "galleryPermission": "Foto\u011fraf se\u00e7mek i\u00e7in galeri izni gerekli.",
+    "error": "Hata",
+    "notFound": "Bulunamad\u0131",
+    "notFoundDescription": "Arad\u0131\u011f\u0131n\u0131z i\u00e7erik mevcut de\u011fil.",
+    "goBack": "Geri D\u00f6n"
   }
 }

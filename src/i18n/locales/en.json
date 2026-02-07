@@ -251,7 +251,8 @@
     "cancel": "Cancel",
     "camera": "Camera",
     "gallery": "Gallery",
-    "changePhoto": "Change"
+    "changePhoto": "Change",
+    "saveError": "Something went wrong while saving. Please try again."
   },
   "validation": {
     "denominationRequired": "Please enter denomination",
@@ -267,6 +268,10 @@
     "turkish": "T\u00fcrk\u00e7e",
     "permissionDenied": "Permission Denied",
     "cameraPermission": "Camera permission is needed to take photos.",
-    "galleryPermission": "Photo library permission is needed to select photos."
+    "galleryPermission": "Photo library permission is needed to select photos.",
+    "error": "Error",
+    "notFound": "Not Found",
+    "notFoundDescription": "The content you're looking for doesn't exist.",
+    "goBack": "Go Back"
   }
 }

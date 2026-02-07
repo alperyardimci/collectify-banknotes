@@ -28,10 +28,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#14161E"
       },
-      "edgeToEdgeEnabled": true,
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "edgeToEdgeEnabled": true
     },
     "plugins": [
       "expo-router",

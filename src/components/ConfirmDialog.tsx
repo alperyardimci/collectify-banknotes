@@ -1,5 +1,6 @@
 import { Modal, View, Text, Pressable } from "react-native";
 import * as Haptics from "expo-haptics";
+import { useTranslation } from "react-i18next";
 
 interface ConfirmDialogProps {
   visible: boolean;
@@ -20,6 +21,8 @@ export function ConfirmDialog({
   onCancel,
   destructive = false,
 }: ConfirmDialogProps) {
+  const { t } = useTranslation();
+
   const handleConfirm = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onConfirm();
@@ -44,7 +47,7 @@ export function ConfirmDialog({
               accessibilityRole="button"
             >
               <Text className="text-h3 text-text-secondary">
-                Cancel
+                {t("banknote.cancel")}
               </Text>
             </Pressable>
             <Pressable

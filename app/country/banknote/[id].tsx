@@ -38,7 +38,17 @@ export default function BanknoteDetailScreen() {
 
   const country = getCountry(countryCode);
 
-  if (!banknote || !country) return null;
+  if (!banknote || !country) {
+    return (
+      <View className="flex-1 bg-background items-center justify-center px-xl" style={{ paddingTop: insets.top }}>
+        <Header title={t("common.notFound")} showBack />
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-h2 text-text-primary mb-sm">{t("common.notFound")}</Text>
+          <Text className="text-body text-text-secondary text-center">{t("common.notFoundDescription")}</Text>
+        </View>
+      </View>
+    );
+  }
 
   const yearDisplay = banknote.is_current
     ? `${banknote.year_start} - ${t("banknote.present")}`

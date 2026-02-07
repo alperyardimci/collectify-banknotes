@@ -2,6 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { useTranslation } from "react-i18next";
 import { COLORS } from "@/constants/theme";
 import type { ReactNode } from "react";
 
@@ -13,6 +14,7 @@ interface HeaderProps {
 
 export function Header({ title, showBack = false, rightAction }: HeaderProps) {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleBack = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -25,7 +27,7 @@ export function Header({ title, showBack = false, rightAction }: HeaderProps) {
         <Pressable
           onPress={handleBack}
           className="w-11 h-11 items-center justify-center -ml-2"
-          accessibilityLabel="Back"
+          accessibilityLabel={t("common.back")}
           accessibilityRole="button"
         >
           <Ionicons name="chevron-back" size={24} color={COLORS.textPrimary} />
