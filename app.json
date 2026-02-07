@@ -21,7 +21,7 @@
         "NSPhotoLibraryUsageDescription": "We need photo library access to select banknote photos."
       },
       "bundleIdentifier": "com.alperyardimci.collectifybanknotes",
-      "buildNumber": "1"
+      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
