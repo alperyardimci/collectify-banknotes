@@ -44,7 +44,7 @@ export default function CountryScreen() {
 
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
-      <Header title={`${country.flag} ${t(country.nameKey)}`} showBack />
+      <Header title={t(country.nameKey)} showBack />
 
       {banknotes.length === 0 ? (
         <EmptyState

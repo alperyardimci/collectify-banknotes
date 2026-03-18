@@ -10,15 +10,20 @@ interface HeaderProps {
   title: string;
   showBack?: boolean;
   rightAction?: ReactNode;
+  onBack?: () => void;
 }
 
-export function Header({ title, showBack = false, rightAction }: HeaderProps) {
+export function Header({ title, showBack = false, rightAction, onBack }: HeaderProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
   const handleBack = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.back();
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
   };
 
   return (

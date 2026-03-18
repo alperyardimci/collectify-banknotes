@@ -20,7 +20,7 @@ const getInitialLanguage = (): string => {
   const saved = getSavedLanguage();
   if (saved === 'en' || saved === 'tr') return saved;
   const deviceLocale = getLocales()[0]?.languageCode ?? 'en';
-  return deviceLocale === 'tr' ? 'tr' : 'en';
+  return deviceLocale === 'en' ? 'en' : 'tr';
 };
 
 i18n.use(initReactI18next).init({

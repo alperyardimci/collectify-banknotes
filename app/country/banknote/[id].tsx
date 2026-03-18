@@ -11,6 +11,7 @@ import { useBanknoteStore } from "@/store/useBanknoteStore";
 import { getCountry } from "@/constants/countries";
 import { Header } from "@/components/Header";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { FlagIcon } from "@/components/FlagIcon";
 import { COLORS } from "@/constants/theme";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -66,6 +67,14 @@ export default function BanknoteDetailScreen() {
     setShowingBack(!showingBack);
   };
 
+  const openPhotoViewer = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const params = banknote.back_photo
+      ? `uri=${encodeURIComponent(banknote.front_photo)}&backUri=${encodeURIComponent(banknote.back_photo)}`
+      : `uri=${encodeURIComponent(banknote.front_photo)}`;
+    router.push(`/photo-viewer?${params}`);
+  };
+
   const handleDelete = () => {
     deleteBanknote(db, banknote.id, banknote.front_photo, banknote.back_photo);
     router.back();
@@ -100,14 +109,17 @@ export default function BanknoteDetailScreen() {
         contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
       >
         {/* Photo */}
-        <Pressable onPress={togglePhoto}>
+        <Pressable onPress={openPhotoViewer} onLongPress={togglePhoto}>
           <Image
             source={{ uri: currentPhoto }}
             style={{ width: SCREEN_WIDTH, height: PHOTO_HEIGHT }}
             contentFit="cover"
           />
           {banknote.back_photo && (
-            <View className="absolute bottom-3 right-3 bg-surface/80 rounded-md px-sm py-xs flex-row items-center">
+            <Pressable
+              onPress={togglePhoto}
+              className="absolute bottom-3 right-3 bg-surface/80 rounded-md px-sm py-xs flex-row items-center"
+            >
               <Ionicons
                 name="sync-outline"
                 size={14}
@@ -116,7 +128,7 @@ export default function BanknoteDetailScreen() {
               <Text className="text-caption text-text-primary ml-xs">
                 {showingBack ? t("banknote.frontPhoto") : t("banknote.backPhoto")}
               </Text>
-            </View>
+            </Pressable>
           )}
         </Pressable>
 
@@ -124,7 +136,9 @@ export default function BanknoteDetailScreen() {
         <View className="px-xl pt-lg">
           {/* Country */}
           <View className="flex-row items-center mb-md">
-            <Text className="text-[24px] mr-sm">{country.flag}</Text>
+            <View className="mr-sm">
+              <FlagIcon code={country.code} flag={country.flag} size={28} />
+            </View>
             <Text className="text-h2 text-text-primary">
               {t(country.nameKey)}
             </Text>

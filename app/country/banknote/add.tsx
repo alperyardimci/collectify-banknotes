@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -13,12 +13,16 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSQLiteContext } from "expo-sqlite";
 import { useTranslation } from "react-i18next";
 import { getCountry } from "@/constants/countries";
-import { useBanknoteStore } from "@/store/useBanknoteStore";
+import { ACHIEVEMENTS } from "@/constants/achievements";
+import { useBanknoteStore, type MilestoneEvent } from "@/store/useBanknoteStore";
 import { savePhoto } from "@/utils/photos";
 import { Header } from "@/components/Header";
 import { PhotoCapture } from "@/components/PhotoCapture";
 import { YearPicker } from "@/components/YearPicker";
 import { GoldButton } from "@/components/GoldButton";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { CelebrationOverlay } from "@/components/CelebrationOverlay";
+import { AchievementUnlockModal } from "@/components/AchievementUnlockModal";
 import { COLORS } from "@/constants/theme";
 
 interface FormErrors {
@@ -29,7 +33,17 @@ interface FormErrors {
 }
 
 export default function AddBanknoteScreen() {
-  const { countryCode } = useLocalSearchParams<{ countryCode: string }>();
+  const params = useLocalSearchParams<{
+    countryCode: string;
+    denomination?: string;
+    currency?: string;
+    yearStart?: string;
+    yearEnd?: string;
+    isCurrent?: string;
+    photoUri?: string;
+    notes?: string;
+  }>();
+  const { countryCode } = params;
   const { t } = useTranslation();
   const router = useRouter();
   const db = useSQLiteContext();
@@ -38,15 +52,40 @@ export default function AddBanknoteScreen() {
 
   const country = getCountry(countryCode);
 
-  const [denomination, setDenomination] = useState("");
-  const [frontPhotoUri, setFrontPhotoUri] = useState<string>();
+  const [denomination, setDenomination] = useState(params.denomination || "");
+  const [frontPhotoUri, setFrontPhotoUri] = useState<string | undefined>(
+    params.photoUri ? decodeURIComponent(params.photoUri) : undefined
+  );
   const [backPhotoUri, setBackPhotoUri] = useState<string>();
-  const [yearStart, setYearStart] = useState("");
-  const [yearEnd, setYearEnd] = useState("");
-  const [isCurrent, setIsCurrent] = useState(false);
-  const [notes, setNotes] = useState("");
+  const [yearStart, setYearStart] = useState(params.yearStart || "");
+  const [yearEnd, setYearEnd] = useState(params.yearEnd || "");
+  const [isCurrent, setIsCurrent] = useState(params.isCurrent === "1");
+  const [notes, setNotes] = useState(
+    params.notes ? decodeURIComponent(params.notes) : ""
+  );
   const [errors, setErrors] = useState<FormErrors>({});
   const [saving, setSaving] = useState(false);
+  const [showDiscardDialog, setShowDiscardDialog] = useState(false);
+
+  const hasUnsavedChanges = () => {
+    return !!(denomination.trim() || frontPhotoUri || backPhotoUri || yearStart.trim() || notes.trim());
+  };
+
+  const handleBack = () => {
+    if (hasUnsavedChanges()) {
+      setShowDiscardDialog(true);
+    } else {
+      router.back();
+    }
+  };
+
+  // Celebration state
+  const [celebrationVisible, setCelebrationVisible] = useState(false);
+  const [celebrationEmoji, setCelebrationEmoji] = useState("");
+  const [celebrationTitle, setCelebrationTitle] = useState("");
+  const [celebrationSubtitle, setCelebrationSubtitle] = useState("");
+  const [achievementQueue, setAchievementQueue] = useState<string[]>([]);
+  const [currentAchievement, setCurrentAchievement] = useState<string | null>(null);
 
   if (!country) {
     return (
@@ -66,12 +105,7 @@ export default function AddBanknoteScreen() {
     if (!denomination.trim()) {
       newErrors.denomination = t("validation.denominationRequired");
     }
-    if (!frontPhotoUri) {
-      newErrors.frontPhoto = t("validation.frontPhotoRequired");
-    }
-    if (!yearStart.trim()) {
-      newErrors.yearStart = t("validation.yearStartRequired");
-    } else {
+    if (yearStart.trim()) {
       const ys = parseInt(yearStart, 10);
       if (isNaN(ys) || ys < 1600 || ys > 2100) {
         newErrors.yearStart = t("validation.yearInvalid");
@@ -91,21 +125,75 @@ export default function AddBanknoteScreen() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const showMilestones = (milestones: MilestoneEvent[]) => {
+    // Find the most important milestone to show as celebration
+    const countMilestone = milestones.find((m) => m.type === "count_milestone");
+    const newCountry = milestones.find((m) => m.type === "new_country");
+    const achievements = milestones
+      .filter((m) => m.type === "achievement")
+      .map((m) => m.achievementId!)
+      .filter(Boolean);
+
+    if (countMilestone) {
+      setCelebrationEmoji("\uD83C\uDF89");
+      setCelebrationTitle(t("celebration.milestone", { count: countMilestone.count }));
+      setCelebrationSubtitle(t("celebration.awesome"));
+      setCelebrationVisible(true);
+    } else if (newCountry) {
+      setCelebrationEmoji("\uD83C\uDF0D");
+      setCelebrationTitle(t("celebration.newCountry"));
+      setCelebrationSubtitle(country ? t(country.nameKey) : "");
+      setCelebrationVisible(true);
+    }
+
+    if (achievements.length > 0) {
+      setAchievementQueue(achievements);
+      // If no celebration overlay, show achievement immediately
+      if (!countMilestone && !newCountry) {
+        setCurrentAchievement(achievements[0]);
+        setAchievementQueue(achievements.slice(1));
+      }
+    } else if (!countMilestone && !newCountry) {
+      // No milestones at all, just go back
+      router.back();
+    }
+  };
+
+  const handleCelebrationDismiss = () => {
+    setCelebrationVisible(false);
+    if (achievementQueue.length > 0) {
+      setCurrentAchievement(achievementQueue[0]);
+      setAchievementQueue(achievementQueue.slice(1));
+    } else {
+      router.back();
+    }
+  };
+
+  const handleAchievementDismiss = () => {
+    setCurrentAchievement(null);
+    if (achievementQueue.length > 0) {
+      setCurrentAchievement(achievementQueue[0]);
+      setAchievementQueue(achievementQueue.slice(1));
+    } else {
+      router.back();
+    }
+  };
+
   const handleSave = async () => {
     if (!validate() || saving) return;
 
     setSaving(true);
     try {
-      const savedFrontPhoto = savePhoto(frontPhotoUri!);
+      const savedFrontPhoto = frontPhotoUri ? savePhoto(frontPhotoUri) : "";
       const savedBackPhoto = backPhotoUri ? savePhoto(backPhotoUri) : null;
 
-      addBanknote(db, {
+      const { milestones } = addBanknote(db, {
         country_code: countryCode,
         denomination: denomination.trim(),
         currency: country.currency,
         front_photo: savedFrontPhoto,
         back_photo: savedBackPhoto,
-        year_start: parseInt(yearStart, 10),
+        year_start: yearStart.trim() ? parseInt(yearStart, 10) : 0,
         year_end:
           isCurrent || !yearEnd.trim()
             ? null
@@ -114,7 +202,11 @@ export default function AddBanknoteScreen() {
         notes: notes.trim() || null,
       });
 
-      router.back();
+      if (milestones.length > 0) {
+        showMilestones(milestones);
+      } else {
+        router.back();
+      }
     } catch (error) {
       Alert.alert(
         t("common.error"),
@@ -125,9 +217,13 @@ export default function AddBanknoteScreen() {
     }
   };
 
+  const achievementDef = currentAchievement
+    ? ACHIEVEMENTS.find((a) => a.id === currentAchievement) ?? null
+    : null;
+
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
-      <Header title={t("banknote.addTitle")} showBack />
+      <Header title={t("banknote.addTitle")} showBack onBack={handleBack} />
 
       <KeyboardAvoidingView
         className="flex-1"
@@ -186,7 +282,6 @@ export default function AddBanknoteScreen() {
               label={t("banknote.frontPhoto")}
               photoUri={frontPhotoUri}
               onPhotoSelected={setFrontPhotoUri}
-              required
               error={errors.frontPhoto}
             />
           </View>
@@ -248,6 +343,35 @@ export default function AddBanknoteScreen() {
           <View style={{ height: insets.bottom + 16 }} />
         </ScrollView>
       </KeyboardAvoidingView>
+
+      {/* Celebration Overlay */}
+      <CelebrationOverlay
+        visible={celebrationVisible}
+        emoji={celebrationEmoji}
+        title={celebrationTitle}
+        subtitle={celebrationSubtitle}
+        onDismiss={handleCelebrationDismiss}
+      />
+
+      {/* Achievement Unlock Modal */}
+      <AchievementUnlockModal
+        visible={!!currentAchievement}
+        achievement={achievementDef}
+        onDismiss={handleAchievementDismiss}
+      />
+
+      <ConfirmDialog
+        visible={showDiscardDialog}
+        title={t("banknote.discardTitle")}
+        message={t("banknote.discardMessage")}
+        confirmLabel={t("banknote.discardConfirm")}
+        onConfirm={() => {
+          setShowDiscardDialog(false);
+          router.back();
+        }}
+        onCancel={() => setShowDiscardDialog(false)}
+        destructive
+      />
     </View>
   );
 }

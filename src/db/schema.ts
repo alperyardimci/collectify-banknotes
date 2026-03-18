@@ -20,4 +20,19 @@ export function initDatabase(db: SQLiteDatabase): void {
   db.execSync(`
     CREATE INDEX IF NOT EXISTS idx_banknotes_country_code ON banknotes (country_code);
   `);
+  db.execSync(`
+    CREATE TABLE IF NOT EXISTS achievements (
+      id TEXT PRIMARY KEY,
+      unlocked_at TEXT DEFAULT NULL
+    );
+  `);
+  db.execSync(`
+    CREATE TABLE IF NOT EXISTS custom_countries (
+      code TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      flag TEXT DEFAULT '🏳️',
+      currency TEXT NOT NULL,
+      continent_id TEXT DEFAULT 'other'
+    );
+  `);
 }

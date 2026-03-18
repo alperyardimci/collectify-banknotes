@@ -128,3 +128,50 @@ export function updateBanknote(
 export function deleteBanknote(db: SQLiteDatabase, id: number): void {
   db.runSync("DELETE FROM banknotes WHERE id = ?", [id]);
 }
+
+// Custom country queries
+export interface CustomCountryRow {
+  code: string;
+  name: string;
+  flag: string;
+  currency: string;
+  continent_id: string;
+}
+
+export function getAllCustomCountries(db: SQLiteDatabase): CustomCountryRow[] {
+  return db.getAllSync<CustomCountryRow>("SELECT * FROM custom_countries");
+}
+
+export function insertCustomCountry(
+  db: SQLiteDatabase,
+  data: { code: string; name: string; currency: string; flag?: string }
+): void {
+  db.runSync(
+    "INSERT OR IGNORE INTO custom_countries (code, name, flag, currency, continent_id) VALUES (?, ?, ?, ?, 'other')",
+    [data.code, data.name, data.flag || "\uD83C\uDFF3\uFE0F", data.currency]
+  );
+}
+
+export function deleteCustomCountry(db: SQLiteDatabase, code: string): void {
+  db.runSync("DELETE FROM banknotes WHERE country_code = ?", [code]);
+  db.runSync("DELETE FROM custom_countries WHERE code = ?", [code]);
+}
+
+// Achievement queries
+export interface AchievementRow {
+  id: string;
+  unlocked_at: string;
+}
+
+export function getUnlockedAchievements(db: SQLiteDatabase): AchievementRow[] {
+  return db.getAllSync<AchievementRow>(
+    "SELECT * FROM achievements WHERE unlocked_at IS NOT NULL"
+  );
+}
+
+export function unlockAchievement(db: SQLiteDatabase, id: string): void {
+  db.runSync(
+    "INSERT OR IGNORE INTO achievements (id, unlocked_at) VALUES (?, datetime('now'))",
+    [id]
+  );
+}

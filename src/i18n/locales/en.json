@@ -9,7 +9,8 @@
     "europe": "Europe",
     "north-america": "North America",
     "south-america": "South America",
-    "oceania": "Oceania"
+    "oceania": "Oceania",
+    "other": "Other"
   },
   "countries": {
     "DZ": "Algeria",
@@ -252,7 +253,10 @@
     "camera": "Camera",
     "gallery": "Gallery",
     "changePhoto": "Change",
-    "saveError": "Something went wrong while saving. Please try again."
+    "saveError": "Something went wrong while saving. Please try again.",
+    "discardTitle": "Discard Changes?",
+    "discardMessage": "You have unsaved changes. Are you sure you want to go back? Your data will be lost.",
+    "discardConfirm": "Discard"
   },
   "validation": {
     "denominationRequired": "Please enter denomination",
@@ -273,5 +277,204 @@
     "notFound": "Not Found",
     "notFoundDescription": "The content you're looking for doesn't exist.",
     "goBack": "Go Back"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "unlocked": "Unlocked",
+    "locked": "Locked",
+    "progress": "{{unlocked}}/{{total}} unlocked",
+    "tapToContinue": "Tap to continue",
+    "viewAll": "View all achievements",
+    "first_banknote": {
+      "title": "First Step",
+      "description": "Add your first banknote to the collection"
+    },
+    "ten_banknotes": {
+      "title": "Collector",
+      "description": "Collect 10 banknotes"
+    },
+    "twentyfive_banknotes": {
+      "title": "Enthusiast",
+      "description": "Collect 25 banknotes"
+    },
+    "fifty_banknotes": {
+      "title": "Expert",
+      "description": "Collect 50 banknotes"
+    },
+    "hundred_banknotes": {
+      "title": "Master Collector",
+      "description": "Collect 100 banknotes"
+    },
+    "five_countries": {
+      "title": "Traveler",
+      "description": "Collect banknotes from 5 different countries"
+    },
+    "ten_countries": {
+      "title": "Globe Trotter",
+      "description": "Collect banknotes from 10 different countries"
+    },
+    "twentyfive_countries": {
+      "title": "World Traveler",
+      "description": "Collect banknotes from 25 different countries"
+    },
+    "all_continents": {
+      "title": "Continental",
+      "description": "Collect banknotes from all 6 continents"
+    },
+    "continent_complete": {
+      "title": "Completionist",
+      "description": "Collect from every country in a continent"
+    },
+    "photographer": {
+      "title": "Photographer",
+      "description": "Add back photos to 10 banknotes"
+    },
+    "world_explorer": {
+      "title": "World Explorer",
+      "description": "Collect banknotes from 50 different countries"
+    }
+  },
+  "celebration": {
+    "newCountry": "New Country!",
+    "continentComplete": "Continent Complete!",
+    "milestone": "{{count}} Banknotes!",
+    "awesome": "Awesome!"
+  },
+  "statistics": {
+    "title": "Statistics",
+    "collectionAge": "Days Collecting",
+    "totalBanknotes": "Banknotes",
+    "totalCountries": "Countries",
+    "continentDistribution": "By Continent",
+    "topDenominations": "Top Denominations",
+    "recentActivity": "Recent Activity",
+    "achievementsOverview": "Achievements",
+    "justNow": "Just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}}d ago"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search countries, denominations...",
+    "all": "All",
+    "hasPhoto": "Has Back Photo",
+    "noResults": "No results found",
+    "noResultsDescription": "Try a different search term or filter",
+    "resultsCount": "{{count}} results"
+  },
+  "photoViewer": {
+    "close": "Close",
+    "front": "Front",
+    "back": "Back"
+  },
+  "quickAdd": {
+    "title": "Add Banknote",
+    "searchPlaceholder": "Search country...",
+    "customCountry": "Country not in list?",
+    "customCountryHint": "Add historical or unlisted country",
+    "countryName": "Country Name",
+    "countryNamePlaceholder": "e.g. Yugoslavia, Soviet Union",
+    "currencyCode": "Currency Code",
+    "currencyCodePlaceholder": "e.g. YUD, SUR",
+    "nameRequired": "Please enter a country name",
+    "currencyRequired": "Please enter a currency code",
+    "continue": "Continue",
+    "backToList": "Back to country list",
+    "deleteCountryTitle": "Delete Country?",
+    "deleteCountryMessage": "This will permanently delete this country and all its banknotes. This cannot be undone."
+  },
+  "identify": {
+    "title": "Identify Banknote",
+    "takePhoto": "Take a photo of your banknote",
+    "takePhotoHint": "Front side works best",
+    "choosePhoto": "Choose photo source",
+    "identifyButton": "Identify Banknote",
+    "analyzing": "Analyzing banknote...",
+    "cannotIdentify": "Could not identify this banknote. Try a clearer photo.",
+    "error": "Something went wrong. Please try again.",
+    "tryAgain": "Try Again",
+    "addToCollection": "Add to Collection",
+    "countryNotFound": "Country \"{{country}}\" is not in our database",
+    "confidence": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "welcome": "Cloud Backup",
+    "welcomeDesc": "Sign in to backup your collection and restore it on any device",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "Min. 6 characters",
+    "signIn": "Sign In",
+    "signUp": "Create Account",
+    "signOut": "Sign Out",
+    "hasAccount": "Already have an account? Sign in",
+    "noAccount": "Don't have an account? Create one",
+    "loggedIn": "Connected",
+    "fillFields": "Please fill in email and password",
+    "passwordShort": "Password must be at least 6 characters",
+    "userNotFound": "No account found with this email",
+    "wrongPassword": "Incorrect password",
+    "emailInUse": "This email is already registered",
+    "invalidEmail": "Please enter a valid email",
+    "authError": "Authentication failed. Please try again.",
+    "backup": "Backup Collection",
+    "backupHint": "{{count}} banknotes will be saved to cloud",
+    "backupSuccess": "Backup Complete",
+    "backupSuccessMsg": "{{count}} banknotes saved to cloud successfully",
+    "restore": "Restore Collection",
+    "restoreHint": "Download your collection from cloud",
+    "restoreTitle": "Restore Collection?",
+    "restoreWarning": "This will replace your current local collection with the cloud backup. This cannot be undone.",
+    "restoreConfirm": "Restore",
+    "restoreSuccess": "Restore Complete",
+    "restoreSuccessMsg": "{{count}} banknotes restored from cloud",
+    "syncError": "Sync failed. Please check your connection and try again.",
+    "fileTransfer": "File Transfer",
+    "fileTransferDesc": "Export your collection as a file and import it on another device",
+    "exportFile": "Export Collection File",
+    "exportFileHint": "Save as .json file with all photos",
+    "importFile": "Import Collection File",
+    "importFileHint": "Restore from a .json backup file",
+    "exportError": "Failed to export collection",
+    "importTitle": "Import Collection?",
+    "importWarning": "This will replace your current collection with the imported data. This cannot be undone.",
+    "importConfirm": "Import",
+    "importSuccess": "Import Complete",
+    "importSuccessMsg": "{{count}} banknotes imported successfully",
+    "importInvalid": "Invalid backup file. Make sure it was exported from Collectify Banknotes.",
+    "importError": "Failed to import collection",
+    "compare": "Compare Collections"
+  },
+  "compare": {
+    "title": "Compare Collections",
+    "description": "Load another collector's export file to see how your collections differ",
+    "selectFile": "Select Collection File",
+    "error": "Failed to load collection file",
+    "you": "You",
+    "them": "Them",
+    "banknotes": "banknotes",
+    "countries": "countries",
+    "byContinent": "By Continent",
+    "commonCountries": "Countries in Common",
+    "onlyYou": "Only in Your Collection",
+    "onlyThem": "Only in Their Collection",
+    "uniqueYours": "Your Unique Banknotes",
+    "uniqueTheirs": "Banknotes You're Missing",
+    "compareAnother": "Compare Another Collection"
+  },
+  "export": {
+    "title": "Export Collection",
+    "csv": "Spreadsheet (CSV)",
+    "csvDescription": "Table format for Excel or Google Sheets",
+    "pdf": "PDF Summary",
+    "pdfDescription": "Formatted document with collection overview",
+    "generating": "Generating...",
+    "error": "Failed to generate export"
   }
 }

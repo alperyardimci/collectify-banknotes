@@ -9,7 +9,8 @@
     "europe": "Avrupa",
     "north-america": "Kuzey Amerika",
     "south-america": "G\u00fcney Amerika",
-    "oceania": "Okyanusya"
+    "oceania": "Okyanusya",
+    "other": "Di\u011fer"
   },
   "countries": {
     "DZ": "Cezayir",
@@ -252,7 +253,10 @@
     "camera": "Kamera",
     "gallery": "Galeri",
     "changePhoto": "De\u011fi\u015ftir",
-    "saveError": "Kaydederken bir sorun olu\u015ftu. L\u00fctfen tekrar deneyin."
+    "saveError": "Kaydederken bir sorun olu\u015ftu. L\u00fctfen tekrar deneyin.",
+    "discardTitle": "De\u011fi\u015fiklikleri Sil?",
+    "discardMessage": "Kaydedilmemi\u015f de\u011fi\u015fiklikleriniz var. Geri d\u00f6nmek istedi\u011finize emin misiniz? Verileriniz kaybolacakt\u0131r.",
+    "discardConfirm": "Sil"
   },
   "validation": {
     "denominationRequired": "L\u00fctfen kup\u00fcr\u00fc girin",
@@ -273,5 +277,204 @@
     "notFound": "Bulunamad\u0131",
     "notFoundDescription": "Arad\u0131\u011f\u0131n\u0131z i\u00e7erik mevcut de\u011fil.",
     "goBack": "Geri D\u00f6n"
+  },
+  "achievements": {
+    "title": "Ba\u015far\u0131mlar",
+    "unlocked": "A\u00e7\u0131ld\u0131",
+    "locked": "Kilitli",
+    "progress": "{{unlocked}}/{{total}} a\u00e7\u0131ld\u0131",
+    "tapToContinue": "Devam etmek i\u00e7in dokun",
+    "viewAll": "T\u00fcm ba\u015far\u0131mlar\u0131 g\u00f6r",
+    "first_banknote": {
+      "title": "\u0130lk Ad\u0131m",
+      "description": "Koleksiyonuna ilk banknotunu ekle"
+    },
+    "ten_banknotes": {
+      "title": "Koleksiyoncu",
+      "description": "10 banknot topla"
+    },
+    "twentyfive_banknotes": {
+      "title": "Merakl\u0131",
+      "description": "25 banknot topla"
+    },
+    "fifty_banknotes": {
+      "title": "Uzman",
+      "description": "50 banknot topla"
+    },
+    "hundred_banknotes": {
+      "title": "Usta Koleksiyoncu",
+      "description": "100 banknot topla"
+    },
+    "five_countries": {
+      "title": "Gezgin",
+      "description": "5 farkl\u0131 \u00fclkeden banknot topla"
+    },
+    "ten_countries": {
+      "title": "D\u00fcnya Gezgini",
+      "description": "10 farkl\u0131 \u00fclkeden banknot topla"
+    },
+    "twentyfive_countries": {
+      "title": "Kaşif",
+      "description": "25 farkl\u0131 \u00fclkeden banknot topla"
+    },
+    "all_continents": {
+      "title": "K\u0131tasal",
+      "description": "6 k\u0131tan\u0131n hepsinden banknot topla"
+    },
+    "continent_complete": {
+      "title": "Tamamlay\u0131c\u0131",
+      "description": "Bir k\u0131tadaki t\u00fcm \u00fclkelerden banknot topla"
+    },
+    "photographer": {
+      "title": "Foto\u011fraf\u00e7\u0131",
+      "description": "10 banknota arka y\u00fcz foto\u011fraf\u0131 ekle"
+    },
+    "world_explorer": {
+      "title": "D\u00fcnya Ka\u015fifi",
+      "description": "50 farkl\u0131 \u00fclkeden banknot topla"
+    }
+  },
+  "celebration": {
+    "newCountry": "Yeni \u00dclke!",
+    "continentComplete": "K\u0131ta Tamamland\u0131!",
+    "milestone": "{{count}} Banknot!",
+    "awesome": "Harika!"
+  },
+  "statistics": {
+    "title": "\u0130statistikler",
+    "collectionAge": "Toplama G\u00fcn\u00fc",
+    "totalBanknotes": "Banknot",
+    "totalCountries": "\u00dclke",
+    "continentDistribution": "K\u0131talara G\u00f6re",
+    "topDenominations": "En \u00c7ok Kup\u00fcr",
+    "recentActivity": "Son Aktivite",
+    "achievementsOverview": "Ba\u015far\u0131mlar",
+    "justNow": "Az \u00f6nce",
+    "minutesAgo": "{{count}}dk \u00f6nce",
+    "hoursAgo": "{{count}}sa \u00f6nce",
+    "daysAgo": "{{count}}g \u00f6nce"
+  },
+  "search": {
+    "title": "Ara",
+    "placeholder": "\u00dclke, kup\u00fcr ara...",
+    "all": "T\u00fcm\u00fc",
+    "hasPhoto": "Arka Foto\u011fraf",
+    "noResults": "Sonu\u00e7 bulunamad\u0131",
+    "noResultsDescription": "Farkl\u0131 bir arama terimi veya filtre deneyin",
+    "resultsCount": "{{count}} sonu\u00e7"
+  },
+  "photoViewer": {
+    "close": "Kapat",
+    "front": "\u00d6n",
+    "back": "Arka"
+  },
+  "quickAdd": {
+    "title": "Banknot Ekle",
+    "searchPlaceholder": "\u00dclke ara...",
+    "customCountry": "\u00dclke listede yok mu?",
+    "customCountryHint": "Tarihi veya listelenmemi\u015f \u00fclke ekle",
+    "countryName": "\u00dclke Ad\u0131",
+    "countryNamePlaceholder": "\u00f6rn. Yugoslavya, Sovyetler Birli\u011fi",
+    "currencyCode": "Para Birimi Kodu",
+    "currencyCodePlaceholder": "\u00f6rn. YUD, SUR",
+    "nameRequired": "L\u00fctfen \u00fclke ad\u0131 girin",
+    "currencyRequired": "L\u00fctfen para birimi kodu girin",
+    "continue": "Devam Et",
+    "backToList": "\u00dclke listesine d\u00f6n",
+    "deleteCountryTitle": "\u00dclkeyi Sil?",
+    "deleteCountryMessage": "Bu \u00fclke ve t\u00fcm banknotlar\u0131 kal\u0131c\u0131 olarak silinecektir. Bu i\u015flem geri al\u0131namaz."
+  },
+  "identify": {
+    "title": "Banknot Tan\u0131",
+    "takePhoto": "Banknotunuzun foto\u011fraf\u0131n\u0131 \u00e7ekin",
+    "takePhotoHint": "\u00d6n y\u00fcz en iyi sonucu verir",
+    "choosePhoto": "Foto\u011fraf kayna\u011f\u0131 se\u00e7in",
+    "identifyButton": "Banknotu Tan\u0131",
+    "analyzing": "Banknot analiz ediliyor...",
+    "cannotIdentify": "Bu banknot tan\u0131namad\u0131. Daha net bir foto\u011fraf deneyin.",
+    "error": "Bir sorun olu\u015ftu. L\u00fctfen tekrar deneyin.",
+    "tryAgain": "Tekrar Dene",
+    "addToCollection": "Koleksiyona Ekle",
+    "countryNotFound": "\"{{country}}\" \u00fclkesi veritaban\u0131m\u0131zda yok",
+    "confidence": {
+      "high": "Y\u00fcksek",
+      "medium": "Orta",
+      "low": "D\u00fc\u015f\u00fck"
+    }
+  },
+  "account": {
+    "title": "Hesap",
+    "welcome": "Bulut Yedekleme",
+    "welcomeDesc": "Koleksiyonunu yedeklemek ve ba\u015fka cihazda devam etmek i\u00e7in giri\u015f yap",
+    "email": "E-posta",
+    "emailPlaceholder": "ornek@email.com",
+    "password": "\u015eifre",
+    "passwordPlaceholder": "En az 6 karakter",
+    "signIn": "Giri\u015f Yap",
+    "signUp": "Hesap Olu\u015ftur",
+    "signOut": "\u00c7\u0131k\u0131\u015f Yap",
+    "hasAccount": "Zaten hesab\u0131n var m\u0131? Giri\u015f yap",
+    "noAccount": "Hesab\u0131n yok mu? Olu\u015ftur",
+    "loggedIn": "Ba\u011fl\u0131",
+    "fillFields": "L\u00fctfen e-posta ve \u015fifre girin",
+    "passwordShort": "\u015eifre en az 6 karakter olmal\u0131",
+    "userNotFound": "Bu e-posta ile kay\u0131tl\u0131 hesap bulunamad\u0131",
+    "wrongPassword": "Hatal\u0131 \u015fifre",
+    "emailInUse": "Bu e-posta zaten kay\u0131tl\u0131",
+    "invalidEmail": "Ge\u00e7erli bir e-posta girin",
+    "authError": "Kimlik do\u011frulama ba\u015far\u0131s\u0131z. Tekrar deneyin.",
+    "backup": "Koleksiyonu Yedekle",
+    "backupHint": "{{count}} banknot buluta kaydedilecek",
+    "backupSuccess": "Yedekleme Tamamland\u0131",
+    "backupSuccessMsg": "{{count}} banknot ba\u015far\u0131yla buluta kaydedildi",
+    "restore": "Koleksiyonu Geri Y\u00fckle",
+    "restoreHint": "Buluttan koleksiyonunu indir",
+    "restoreTitle": "Koleksiyonu Geri Y\u00fckle?",
+    "restoreWarning": "Bu i\u015flem mevcut yerel koleksiyonunuzu bulut yede\u011fiyle de\u011fi\u015ftirecektir. Geri al\u0131namaz.",
+    "restoreConfirm": "Geri Y\u00fckle",
+    "restoreSuccess": "Geri Y\u00fckleme Tamamland\u0131",
+    "restoreSuccessMsg": "{{count}} banknot buluttan geri y\u00fcklendi",
+    "syncError": "Senkronizasyon ba\u015far\u0131s\u0131z. Ba\u011flant\u0131n\u0131z\u0131 kontrol edip tekrar deneyin.",
+    "fileTransfer": "Dosya Transferi",
+    "fileTransferDesc": "Koleksiyonunu dosya olarak d\u0131\u015fa aktar ve ba\u015fka cihazda i\u00e7e aktar",
+    "exportFile": "Koleksiyonu D\u0131\u015fa Aktar",
+    "exportFileHint": "T\u00fcm foto\u011fraflarla .json dosyas\u0131 olarak kaydet",
+    "importFile": "Koleksiyonu \u0130\u00e7e Aktar",
+    "importFileHint": ".json yedek dosyas\u0131ndan geri y\u00fckle",
+    "exportError": "Koleksiyon d\u0131\u015fa aktar\u0131lamad\u0131",
+    "importTitle": "Koleksiyonu \u0130\u00e7e Aktar?",
+    "importWarning": "Bu i\u015flem mevcut koleksiyonunuzu i\u00e7e aktar\u0131lan verilerle de\u011fi\u015ftirecektir. Geri al\u0131namaz.",
+    "importConfirm": "\u0130\u00e7e Aktar",
+    "importSuccess": "\u0130\u00e7e Aktarma Tamamland\u0131",
+    "importSuccessMsg": "{{count}} banknot ba\u015far\u0131yla i\u00e7e aktar\u0131ld\u0131",
+    "importInvalid": "Ge\u00e7ersiz yedek dosyas\u0131. Collectify Banknotes'tan d\u0131\u015fa aktar\u0131ld\u0131\u011f\u0131ndan emin olun.",
+    "importError": "Koleksiyon i\u00e7e aktar\u0131lamad\u0131",
+    "compare": "Koleksiyonlar\u0131 Kar\u015f\u0131la\u015ft\u0131r"
+  },
+  "compare": {
+    "title": "Koleksiyonlar\u0131 Kar\u015f\u0131la\u015ft\u0131r",
+    "description": "Ba\u015fka bir koleksiyoncunun dosyas\u0131n\u0131 y\u00fckleyerek koleksiyonlar\u0131n\u0131z\u0131 kar\u015f\u0131la\u015ft\u0131r\u0131n",
+    "selectFile": "Koleksiyon Dosyas\u0131 Se\u00e7",
+    "error": "Koleksiyon dosyas\u0131 y\u00fcklenemedi",
+    "you": "Sen",
+    "them": "Di\u011fer",
+    "banknotes": "banknot",
+    "countries": "\u00fclke",
+    "byContinent": "K\u0131talara G\u00f6re",
+    "commonCountries": "Ortak \u00dclkeler",
+    "onlyYou": "Sadece Sende",
+    "onlyThem": "Sadece Onda",
+    "uniqueYours": "Senin \u00d6zel Banknotlar\u0131n",
+    "uniqueTheirs": "Sende Olmayan Banknotlar",
+    "compareAnother": "Ba\u015fka Koleksiyon Kar\u015f\u0131la\u015ft\u0131r"
+  },
+  "export": {
+    "title": "Koleksiyonu D\u0131\u015fa Aktar",
+    "csv": "Tablo (CSV)",
+    "csvDescription": "Excel veya Google Sheets i\u00e7in tablo format\u0131",
+    "pdf": "PDF \u00d6zeti",
+    "pdfDescription": "Koleksiyon genel bak\u0131\u015fl\u0131 bi\u00e7imli belge",
+    "generating": "Olu\u015fturuluyor...",
+    "error": "D\u0131\u015fa aktarma ba\u015far\u0131s\u0131z oldu"
   }
 }

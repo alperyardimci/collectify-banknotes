@@ -5,12 +5,15 @@ import * as Haptics from "expo-haptics";
 import { useTranslation } from "react-i18next";
 import { useBanknoteStore } from "@/store/useBanknoteStore";
 import { getContinentById } from "@/constants/continents";
+import { getCustomCountries } from "@/constants/countries";
 import { ProgressBar } from "./ProgressBar";
+import { EmojiImage } from "./EmojiImage";
 import { COLORS } from "@/constants/theme";
 
 interface ContinentCardProps {
   continentId: string;
   emoji: string;
+  icon?: string;
   nameKey: string;
   onPress: () => void;
 }
@@ -27,6 +30,17 @@ export function ContinentCard({
   const { collected, total, percentage } = useMemo(() => {
     const continent = getContinentById(continentId);
     if (!continent) return { collected: 0, total: 0, percentage: 0 };
+
+    if (continentId === "other") {
+      const customs = getCustomCountries();
+      const tot = customs.length;
+      let col = 0;
+      for (const c of customs) {
+        if (countryStats[c.code] && countryStats[c.code] > 0) col++;
+      }
+      return { collected: col, total: tot, percentage: tot > 0 ? col / tot : 0 };
+    }
+
     const tot = continent.countryCodes.length;
     let col = 0;
     for (const code of continent.countryCodes) {
@@ -48,8 +62,9 @@ export function ContinentCard({
       accessibilityRole="button"
     >
       <View className="flex-row items-center mb-sm">
-        <Text className="text-[28px] mr-sm">{emoji}</Text>
-        <Text className="flex-1 text-h2 font-light text-text-primary">
+        <EmojiImage emoji={emoji} size={21} />
+        <View className="w-3" />
+        <Text className="flex-1 text-h2 font-bold text-text-primary">
           {t(nameKey)}
         </Text>
         <Ionicons name="chevron-forward" size={20} color={COLORS.textSecondary} />

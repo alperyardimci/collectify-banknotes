@@ -32,7 +32,9 @@ function InitializeDatabase() {
         contentStyle: { backgroundColor: COLORS.background },
         animation: "slide_from_right",
       }}
-    />
+    >
+      <Stack.Screen name="photo-viewer" options={{ animation: "fade", presentation: "fullScreenModal" }} />
+    </Stack>
   );
 }
 

@@ -28,7 +28,7 @@ export function YearPicker({
       <View className="flex-row gap-md">
         <View className="flex-1">
           <Text className="text-caption text-text-secondary mb-xs">
-            {t("banknote.yearStart")} <Text className="text-danger">*</Text>
+            {t("banknote.yearStart")}
           </Text>
           <TextInput
             value={yearStart}

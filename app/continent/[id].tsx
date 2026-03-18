@@ -1,24 +1,36 @@
-import { useMemo } from "react";
-import { View, SectionList, Text } from "react-native";
+import { useState, useMemo } from "react";
+import { View, SectionList, Text, Pressable } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSQLiteContext } from "expo-sqlite";
+import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { useTranslation } from "react-i18next";
 import { getContinentById } from "@/constants/continents";
-import { getCountriesByContinent } from "@/constants/countries";
+import { getCountriesByContinent, removeCustomCountry } from "@/constants/countries";
+import { deleteCustomCountry } from "@/db/queries";
 import { useBanknoteStore } from "@/store/useBanknoteStore";
 import { Header } from "@/components/Header";
 import { CountryListItem } from "@/components/CountryListItem";
 import { EmptyState } from "@/components/EmptyState";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { COLORS } from "@/constants/theme";
 
 export default function ContinentScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
   const router = useRouter();
+  const db = useSQLiteContext();
   const insets = useSafeAreaInsets();
   const countryStats = useBanknoteStore((s) => s.countryStats);
+  const loadBanknotes = useBanknoteStore((s) => s.loadBanknotes);
+
+  const [deleteCode, setDeleteCode] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const continent = getContinentById(id);
-  const countries = useMemo(() => getCountriesByContinent(id), [id]);
+  const isOther = id === "other";
+  const countries = useMemo(() => getCountriesByContinent(id), [id, refreshKey]);
 
   const sections = useMemo(() => {
     const collected = countries.filter((c) => (countryStats[c.code] || 0) > 0);
@@ -35,6 +47,15 @@ export default function ContinentScreen() {
     }
     return result;
   }, [countries, countryStats, t]);
+
+  const handleDeleteCountry = () => {
+    if (!deleteCode) return;
+    deleteCustomCountry(db, deleteCode);
+    removeCustomCountry(deleteCode);
+    loadBanknotes(db);
+    setDeleteCode(null);
+    setRefreshKey((k) => k + 1);
+  };
 
   if (!continent) {
     return (
@@ -63,11 +84,25 @@ export default function ContinentScreen() {
           </View>
         )}
         renderItem={({ item }) => (
-          <View className="px-xl mb-sm">
-            <CountryListItem
-              countryCode={item.code}
-              onPress={() => router.push(`/country/${item.code}`)}
-            />
+          <View className="px-xl mb-sm flex-row items-center">
+            <View className="flex-1">
+              <CountryListItem
+                countryCode={item.code}
+                onPress={() => router.push(`/country/${item.code}`)}
+              />
+            </View>
+            {isOther && (
+              <Pressable
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setDeleteCode(item.code);
+                }}
+                className="ml-sm w-9 h-9 items-center justify-center"
+                accessibilityLabel={t("banknote.delete")}
+              >
+                <Ionicons name="trash-outline" size={18} color={COLORS.danger} />
+              </Pressable>
+            )}
           </View>
         )}
         ListEmptyComponent={
@@ -80,6 +115,16 @@ export default function ContinentScreen() {
         showsVerticalScrollIndicator={false}
         stickySectionHeadersEnabled={false}
         contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
+      />
+
+      <ConfirmDialog
+        visible={!!deleteCode}
+        title={t("quickAdd.deleteCountryTitle")}
+        message={t("quickAdd.deleteCountryMessage")}
+        confirmLabel={t("banknote.deleteConfirm")}
+        onConfirm={handleDeleteCountry}
+        onCancel={() => setDeleteCode(null)}
+        destructive
       />
     </View>
   );

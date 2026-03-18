@@ -217,12 +217,46 @@ export const COUNTRIES: Record<string, Country> = {
   VU: { code: "VU", nameKey: "countries.VU", flag: "🇻🇺", currency: "VUV", continentId: "oceania" },
 };
 
+// Runtime store for custom countries (loaded from DB)
+const customCountries: Record<string, Country> = {};
+
+export function registerCustomCountry(
+  code: string,
+  name: string,
+  flag: string,
+  currency: string
+): void {
+  customCountries[code] = {
+    code,
+    nameKey: name, // Direct name, not i18n key
+    flag,
+    currency,
+    continentId: "other",
+  };
+}
+
+export function removeCustomCountry(code: string): void {
+  delete customCountries[code];
+}
+
 export function getCountry(code: string): Country | undefined {
-  return COUNTRIES[code];
+  return COUNTRIES[code] || customCountries[code];
+}
+
+export function getCustomCountries(): Country[] {
+  return Object.values(customCountries);
 }
 
 export function getCountriesByContinent(continentId: string): Country[] {
-  return Object.values(COUNTRIES).filter(
+  const standard = Object.values(COUNTRIES).filter(
     (country) => country.continentId === continentId
   );
+  if (continentId === "other") {
+    return [...standard, ...Object.values(customCountries)];
+  }
+  return standard;
+}
+
+export function getAllCountriesList(): Country[] {
+  return [...Object.values(COUNTRIES), ...Object.values(customCountries)];
 }

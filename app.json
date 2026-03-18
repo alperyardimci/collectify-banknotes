@@ -2,7 +2,7 @@
   "expo": {
     "name": "Collectify Banknotes",
     "slug": "collectify-banknotes",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "collectify",
@@ -21,7 +21,7 @@
         "NSPhotoLibraryUsageDescription": "We need photo library access to select banknote photos."
       },
       "bundleIdentifier": "com.alperyardimci.collectifybanknotes",
-      "buildNumber": "3"
+      "buildNumber": "4"
     },
     "android": {
       "adaptiveIcon": {

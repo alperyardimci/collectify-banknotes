@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useBanknoteStore } from "@/store/useBanknoteStore";
 import { getCountry } from "@/constants/countries";
 import { Badge } from "./Badge";
+import { FlagIcon } from "./FlagIcon";
 import { COLORS } from "@/constants/theme";
 
 interface CountryListItemProps {
@@ -32,12 +33,14 @@ export const CountryListItem = memo(function CountryListItem({
     <Pressable
       onPress={handlePress}
       className="bg-surface rounded-md p-sm flex-row items-center active:bg-surface-light"
-      accessibilityLabel={`${t(country.nameKey)}, ${count} ${t("continent.banknoteCount", { count })}`}
+      accessibilityLabel={`${t(country.nameKey, { defaultValue: country.nameKey })}, ${count} ${t("continent.banknoteCount", { count })}`}
       accessibilityRole="button"
     >
-      <Text className="text-[24px] mr-sm">{country.flag}</Text>
+      <View className="mr-sm">
+        <FlagIcon code={country.code} flag={country.flag} size={24} />
+      </View>
       <View className="flex-1">
-        <Text className="text-h3 text-text-primary">{t(country.nameKey)}</Text>
+        <Text className="text-h3 text-text-primary">{t(country.nameKey, { defaultValue: country.nameKey })}</Text>
         <Text className="text-caption text-text-secondary">{country.currency}</Text>
       </View>
       {count > 0 && <Badge value={count} variant="accent" />}

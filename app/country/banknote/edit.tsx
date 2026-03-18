@@ -18,6 +18,7 @@ import { Header } from "@/components/Header";
 import { PhotoCapture } from "@/components/PhotoCapture";
 import { YearPicker } from "@/components/YearPicker";
 import { GoldButton } from "@/components/GoldButton";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { COLORS } from "@/constants/theme";
 
 interface FormErrors {
@@ -61,6 +62,28 @@ export default function EditBanknoteScreen() {
     banknote?.is_current === 1
   );
   const [notes, setNotes] = useState(banknote?.notes ?? "");
+  const [showDiscardDialog, setShowDiscardDialog] = useState(false);
+
+  const hasChanges = () => {
+    if (!banknote) return false;
+    return (
+      denomination !== banknote.denomination ||
+      frontPhotoUri !== banknote.front_photo ||
+      (backPhotoUri ?? null) !== banknote.back_photo ||
+      yearStart !== banknote.year_start?.toString() ||
+      yearEnd !== (banknote.year_end?.toString() ?? "") ||
+      isCurrent !== (banknote.is_current === 1) ||
+      notes !== (banknote.notes ?? "")
+    );
+  };
+
+  const handleBack = () => {
+    if (hasChanges()) {
+      setShowDiscardDialog(true);
+    } else {
+      router.back();
+    }
+  };
   const [errors, setErrors] = useState<FormErrors>({});
   const [saving, setSaving] = useState(false);
 
@@ -153,7 +176,7 @@ export default function EditBanknoteScreen() {
 
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
-      <Header title={t("banknote.editTitle")} showBack />
+      <Header title={t("banknote.editTitle")} showBack onBack={handleBack} />
 
       <KeyboardAvoidingView
         className="flex-1"
@@ -260,6 +283,19 @@ export default function EditBanknoteScreen() {
           <View style={{ height: insets.bottom + 16 }} />
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <ConfirmDialog
+        visible={showDiscardDialog}
+        title={t("banknote.discardTitle")}
+        message={t("banknote.discardMessage")}
+        confirmLabel={t("banknote.discardConfirm")}
+        onConfirm={() => {
+          setShowDiscardDialog(false);
+          router.back();
+        }}
+        onCancel={() => setShowDiscardDialog(false)}
+        destructive
+      />
     </View>
   );
 }

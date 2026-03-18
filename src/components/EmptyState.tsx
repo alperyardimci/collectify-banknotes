@@ -1,5 +1,6 @@
 import { View, Text } from "react-native";
 import { GoldButton } from "./GoldButton";
+import { EmojiImage } from "./EmojiImage";
 
 interface EmptyStateProps {
   emoji: string;
@@ -18,7 +19,9 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <View className="flex-1 items-center justify-center px-xl py-2xl">
-      <Text className="text-[48px] mb-md">{emoji}</Text>
+      <View className="mb-md">
+        <EmojiImage emoji={emoji} size={48} />
+      </View>
       <Text className="text-h2 text-text-primary text-center mb-sm">
         {title}
       </Text>
