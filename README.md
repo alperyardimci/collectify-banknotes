@@ -13,7 +13,7 @@
   <a href="https://apps.apple.com/tr/app/collectify-banknotes/id6758889763">
     <img src="https://img.shields.io/badge/App_Store-Download-blue?style=for-the-badge&logo=apple" alt="App Store" />
   </a>
-  <img src="https://img.shields.io/badge/version-1.1.0-gold?style=for-the-badge" alt="Version" />
+  <img src="https://img.shields.io/badge/version-1.2.1-gold?style=for-the-badge" alt="Version" />
   <img src="https://img.shields.io/badge/platform-iOS%20%7C%20Android-lightgrey?style=for-the-badge" alt="Platform" />
   <img src="https://img.shields.io/badge/license-Private-red?style=for-the-badge" alt="License" />
 </p>
@@ -36,9 +36,13 @@ Collectify Banknotes is a mobile app built for banknote collectors to catalog, o
 - **Unsaved Changes Protection** - Confirmation dialog when leaving forms with unsaved data
 
 ### AI Banknote Identification
-- **Gemini 2.0 Flash Integration** - Take a photo of any banknote and AI identifies the country, denomination, currency, and year
+- **Gemini 2.0 Flash Lite** - Take a photo of any banknote and AI identifies the country, denomination, currency, and year
+- **Local Pattern Database** - 100+ currency patterns covering Latin, Arabic, Cyrillic, CJK, South Asian, Southeast Asian, Ethiopian, and Hebrew scripts
+- **Historical Currency Support** - Recognizes defunct currencies (Soviet Ruble, Yugoslav Dinar, Deutsche Mark, Ottoman Kuruş, etc.)
 - **Confidence Levels** - Results show High/Medium/Low confidence ratings
 - **Auto-Fill Forms** - Identified data automatically populates the add banknote form
+- **Smart Retry** - Automatic retry with backoff on rate limits
+- **Image Optimization** - Photos compressed before API calls to minimize token usage
 - **Free** - Powered by Google Gemini's free tier (1,500 requests/day)
 
 ### Achievement & Badge System

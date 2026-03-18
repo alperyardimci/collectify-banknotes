@@ -2,7 +2,7 @@
   "expo": {
     "name": "Collectify Banknotes",
     "slug": "collectify-banknotes",
-    "version": "1.1.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "collectify",
@@ -18,7 +18,8 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "We need camera access to photograph your banknotes.",
-        "NSPhotoLibraryUsageDescription": "We need photo library access to select banknote photos."
+        "NSPhotoLibraryUsageDescription": "We need photo library access to select banknote photos.",
+        "ITSAppUsesNonExemptEncryption": false
       },
       "bundleIdentifier": "com.alperyardimci.collectifybanknotes",
       "buildNumber": "4"

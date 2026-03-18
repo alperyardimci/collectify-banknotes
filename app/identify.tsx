@@ -50,11 +50,11 @@ export default function IdentifyScreen() {
 
     const pickerResult = useCamera
       ? await ImagePicker.launchCameraAsync({
-          quality: 0.8,
+          quality: 0.4,
           allowsEditing: false,
         })
       : await ImagePicker.launchImageLibraryAsync({
-          quality: 0.8,
+          quality: 0.4,
           allowsEditing: false,
         });
 
@@ -100,8 +100,9 @@ export default function IdentifyScreen() {
       } else {
         setError(t("identify.cannotIdentify"));
       }
-    } catch (e) {
-      setError(t("identify.error"));
+    } catch (e: any) {
+      console.error("Identify error:", e);
+      setError(t("identify.error") + (e?.message ? `\n${e.message}` : ""));
     } finally {
       setIdentifying(false);
     }
