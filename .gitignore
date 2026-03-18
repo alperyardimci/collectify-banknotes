@@ -43,3 +43,4 @@ yarn-error.*
 # BMad output
 _bmad-output/
 .env
+eas.json

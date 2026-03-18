@@ -28,7 +28,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#14161E"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.alperyardimci.collectifybanknotes",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "plugins": [
       "expo-router",
@@ -39,7 +43,15 @@
           "cameraPermission": "We need camera access to photograph your banknotes.",
           "photosPermission": "We need photo library access to select banknote photos."
         }
-      ]
-    ]
+      ],
+      "expo-font"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "6f1537b5-3c09-410b-9add-3381ededabaf"
+      }
+    },
+    "owner": "alperyardimci"
   }
 }
