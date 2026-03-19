@@ -35,15 +35,15 @@ Collectify Banknotes is a mobile app built for banknote collectors to catalog, o
 - **Edit & Delete** - Full CRUD operations with confirmation dialogs
 - **Unsaved Changes Protection** - Confirmation dialog when leaving forms with unsaved data
 
-### AI Banknote Identification
-- **Gemini 2.0 Flash Lite** - Take a photo of any banknote and AI identifies the country, denomination, currency, and year
-- **Local Pattern Database** - 100+ currency patterns covering Latin, Arabic, Cyrillic, CJK, South Asian, Southeast Asian, Ethiopian, and Hebrew scripts
-- **Historical Currency Support** - Recognizes defunct currencies (Soviet Ruble, Yugoslav Dinar, Deutsche Mark, Ottoman Kuruş, etc.)
-- **Confidence Levels** - Results show High/Medium/Low confidence ratings
-- **Auto-Fill Forms** - Identified data automatically populates the add banknote form
-- **Smart Retry** - Automatic retry with backoff on rate limits
-- **Image Optimization** - Photos compressed before API calls to minimize token usage
-- **Free** - Powered by Google Gemini's free tier (1,500 requests/day)
+### Guided Banknote Identification
+- **4-Step Wizard** - Photo → Script/Alphabet → Country → Denomination
+- **11 Script Categories** - Latin, Turkish, Greek, Arabic, Cyrillic, CJK, South Asian, Southeast Asian, Ethiopic, Hebrew, Historical
+- **Visual Descriptions** - Each country has visual descriptions to identify banknotes without knowing the figures ("bald man with round glasses" instead of "Gandhi")
+- **Figure & Feature Search** - Search within countries by what you see: "pyramid", "lion", "bridge", "green", "polymer"
+- **60+ Countries + 16 Historical** - Comprehensive coverage including Soviet Union, Yugoslavia, Ottoman Empire, pre-Euro currencies
+- **Polymer Note Category** - Dedicated category for plastic/transparent banknotes
+- **Completely Offline** - No API calls, no internet required, instant results
+- **Auto-Fill Forms** - Selected country and denomination automatically populate the add form
 
 ### Achievement & Badge System
 - **12 Unlockable Achievements** - Milestones for collection progress:
@@ -83,12 +83,6 @@ Collectify Banknotes is a mobile app built for banknote collectors to catalog, o
 - **CSV Export** - Spreadsheet format for Excel/Google Sheets
 - **PDF Export** - Beautifully formatted dark-themed PDF with collection summary
 - **Native Share Sheet** - Share via AirDrop, email, Messages, etc.
-
-### Cloud Backup (Firebase)
-- **Email/Password Authentication** - Secure account creation and login
-- **Cloud Backup** - Upload entire collection (metadata + photos as base64) to Firebase
-- **Cloud Restore** - Download and restore collection on any device
-- **Persistent Sessions** - Stay logged in across app restarts
 
 ### File-Based Transfer
 - **Export to JSON** - Complete collection export including all photos as base64
@@ -130,9 +124,7 @@ Collectify Banknotes is a mobile app built for banknote collectors to catalog, o
 | **Styling** | NativeWind (Tailwind CSS) |
 | **State Management** | Zustand |
 | **Database** | expo-sqlite (SQLite) |
-| **Authentication** | Firebase Auth |
-| **Cloud Storage** | Firebase Firestore |
-| **AI** | Google Gemini 2.0 Flash |
+| **Identification** | Local guided wizard with visual pattern database |
 | **Animations** | React Native Reanimated 4.1 |
 | **Gestures** | React Native Gesture Handler 2.28 |
 | **i18n** | i18next + react-i18next |
@@ -163,12 +155,11 @@ collectify-banknotes/
 │   └── compare.tsx              # Collection comparison
 ├── src/
 │   ├── components/              # 18 reusable UI components
-│   ├── constants/               # Theme, continents, countries, achievements
+│   ├── constants/               # Theme, continents, countries, achievements, scripts
 │   ├── db/                      # SQLite schema & queries
 │   ├── store/                   # Zustand state management
-│   ├── services/                # Firebase auth & sync
 │   ├── i18n/                    # Localization (EN/TR)
-│   └── utils/                   # Photos, search, statistics, export, backup, compare, identify
+│   └── utils/                   # Photos, search, statistics, export, backup, compare
 ├── assets/                      # App icons
 └── .env                         # API keys (gitignored)
 ```

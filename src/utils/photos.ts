@@ -5,6 +5,10 @@ function getPhotoDirectory(): Directory {
   return new Directory(Paths.document, PHOTO_DIR);
 }
 
+export function PHOTO_DIR_PATH(): string {
+  return getPhotoDirectory().uri;
+}
+
 export function ensurePhotoDir(): void {
   const dir = getPhotoDirectory();
   if (!dir.exists) {

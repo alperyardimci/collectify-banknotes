@@ -1,9 +1,10 @@
 import { File, Paths } from "expo-file-system/next";
+import { writeAsStringAsync, EncodingType } from "expo-file-system/legacy";
 import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
 import type { SQLiteDatabase } from "expo-sqlite";
 import { getAllBanknotes, getAllCustomCountries, insertCustomCountry } from "@/db/queries";
-import { ensurePhotoDir } from "@/utils/photos";
+import { ensurePhotoDir, PHOTO_DIR_PATH } from "@/utils/photos";
 import { registerCustomCountry } from "@/constants/countries";
 
 interface BackupBanknote {
@@ -43,6 +44,12 @@ async function photoToBase64(uri: string): Promise<string> {
     }
   } catch {}
   return "";
+}
+
+async function writeBase64ToFile(base64: string, filePath: string): Promise<void> {
+  await writeAsStringAsync(filePath, base64, {
+    encoding: EncodingType.Base64,
+  });
 }
 
 export async function exportBackup(
@@ -137,6 +144,8 @@ export async function importBackup(
   // Clear existing
   db.runSync("DELETE FROM banknotes");
 
+  const photoDir = PHOTO_DIR_PATH();
+
   for (const bn of backup.banknotes) {
     let frontPhotoUri = "";
     let backPhotoUri: string | null = null;
@@ -144,17 +153,17 @@ export async function importBackup(
     if (bn.front_photo_base64) {
       ensurePhotoDir();
       const filename = `import_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.jpg`;
-      const photoFile = new File(Paths.document, "banknote-photos", filename);
-      photoFile.write(atob(bn.front_photo_base64));
-      frontPhotoUri = photoFile.uri;
+      const filePath = `${photoDir}/${filename}`;
+      await writeBase64ToFile(bn.front_photo_base64, filePath);
+      frontPhotoUri = filePath;
     }
 
     if (bn.back_photo_base64) {
       ensurePhotoDir();
       const filename = `import_${Date.now()}_${Math.random().toString(36).slice(2, 8)}_back.jpg`;
-      const photoFile = new File(Paths.document, "banknote-photos", filename);
-      photoFile.write(atob(bn.back_photo_base64));
-      backPhotoUri = photoFile.uri;
+      const filePath = `${photoDir}/${filename}`;
+      await writeBase64ToFile(bn.back_photo_base64, filePath);
+      backPhotoUri = filePath;
     }
 
     db.runSync(

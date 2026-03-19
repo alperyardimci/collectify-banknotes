@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSQLiteContext, SQLiteProvider } from "expo-sqlite";
 import { useBanknoteStore } from "@/store/useBanknoteStore";
 import { COLORS } from "@/constants/theme";
@@ -40,10 +41,12 @@ function InitializeDatabase() {
 
 export default function RootLayout() {
   return (
-    <SafeAreaProvider>
-      <SQLiteProvider databaseName="collectify.db">
-        <InitializeDatabase />
-      </SQLiteProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <SQLiteProvider databaseName="collectify.db">
+          <InitializeDatabase />
+        </SQLiteProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
