@@ -50,10 +50,32 @@ Run export as background task, check output for EXPORT SUCCEEDED/FAILED.
 ExportOptions.plist: /Users/alper/Desktop/ExportOptions.plist
 Contents: method=app-store-connect, destination=upload, signingStyle=automatic, teamID=9XUU5C4KK4
 
-## Android APK Build (EAS Cloud)
+## Android APK Build (GitHub Actions - Fast, ~5 min)
+
+DO NOT use EAS Build for Android — free tier queue can take 30-50+ min. Use GitHub Actions instead.
+
+```bash
+# Trigger the workflow
+gh workflow run build-android.yml -R alperyardimci/collectify-banknotes
+
+# Check status
+gh run list -R alperyardimci/collectify-banknotes --limit 1
+
+# Watch progress
+gh run watch -R alperyardimci/collectify-banknotes
+```
+
+After build completes, download APK from GitHub Actions Artifacts:
+- Go to the run URL → Artifacts section → download `collectify-banknotes` zip → extract APK
+
+Workflow file: `.github/workflows/build-android.yml`
+Steps: checkout → npm install → JDK 17 → Android SDK → expo prebuild → gradle assembleRelease → upload artifact
+
+### Fallback: EAS Build (if GitHub Actions fails)
 ```bash
 eas build --platform android --profile preview --non-interactive
 ```
+Note: EAS free tier can take 30-50+ minutes in queue.
 
 ## Credentials
 - ASC API Key: /Users/alper/Downloads/AuthKey_QQ24RND5T3.p8
@@ -75,9 +97,14 @@ eas build --platform android --profile preview --non-interactive
 - **Do NOT install expo-image-manipulator** — Swift API incompatible with SDK 54, causes ARCHIVE FAILED
 
 ### Android Build
-- **.npmrc with `legacy-peer-deps=true`** is REQUIRED — EAS cloud strict npm install fails without it
+- **Never use EAS Build for Android** when speed matters — free tier queue 30-50+ min
+- **Use GitHub Actions** instead — `gh workflow run build-android.yml`, ~5 min, no queue
+- **GitHub needs `workflow` scope** — run `gh auth refresh -h github.com -s workflow` if push fails for workflow files
+- **.npmrc with `legacy-peer-deps=true`** is REQUIRED — both EAS and GitHub Actions strict npm install fails without it
 - **android.package** must be set in app.json for non-interactive builds
-- **EAS init** must be run before first build (`eas init`)
+- **EAS init** must be run before first EAS build (`eas init`)
+- APK is at `android/app/build/outputs/apk/release/app-release.apk` after gradle build
+- Download from GitHub Actions → Artifacts section after workflow completes
 
 ### General
 - **eas.json is gitignored** — contains API keys in env sections
@@ -85,3 +112,4 @@ eas build --platform android --profile preview --non-interactive
 - **When `npx expo install` fails with ERESOLVE**, use `npm install <pkg>@<version> --legacy-peer-deps`
 - **grep output for "error:" after xcodebuild** — exit code 0 doesn't always mean success (tail -5 may miss errors)
 - **Check ARCHIVE SUCCEEDED/FAILED and EXPORT SUCCEEDED/FAILED** explicitly in output
+- **NEVER accept user passwords in chat** — warn them about security
