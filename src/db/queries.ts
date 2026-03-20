@@ -11,6 +11,7 @@ export interface BanknoteRow {
   year_end: number | null;
   is_current: number;
   notes: string | null;
+  serial_number: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -25,6 +26,7 @@ export interface InsertBanknoteData {
   is_current?: number;
   back_photo?: string | null;
   notes?: string | null;
+  serial_number?: string | null;
 }
 
 export interface UpdateBanknoteData {
@@ -35,6 +37,7 @@ export interface UpdateBanknoteData {
   year_end?: number | null;
   is_current?: number;
   notes?: string | null;
+  serial_number?: string | null;
 }
 
 export function getAllBanknotes(db: SQLiteDatabase): BanknoteRow[] {
@@ -62,8 +65,8 @@ export function getCountryBanknoteCounts(
 
 export function insertBanknote(db: SQLiteDatabase, data: InsertBanknoteData): BanknoteRow {
   const result = db.runSync(
-    `INSERT INTO banknotes (country_code, denomination, currency, front_photo, back_photo, year_start, year_end, is_current, notes)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO banknotes (country_code, denomination, currency, front_photo, back_photo, year_start, year_end, is_current, notes, serial_number)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       data.country_code,
       data.denomination,
@@ -74,6 +77,7 @@ export function insertBanknote(db: SQLiteDatabase, data: InsertBanknoteData): Ba
       data.year_end ?? null,
       data.is_current ?? 0,
       data.notes ?? null,
+      data.serial_number ?? null,
     ]
   );
   return getBanknoteById(db, result.lastInsertRowId)!;
@@ -114,6 +118,10 @@ export function updateBanknote(
   if (data.notes !== undefined) {
     fields.push("notes = ?");
     values.push(data.notes);
+  }
+  if (data.serial_number !== undefined) {
+    fields.push("serial_number = ?");
+    values.push(data.serial_number);
   }
 
   if (fields.length === 0) return getBanknoteById(db, id);

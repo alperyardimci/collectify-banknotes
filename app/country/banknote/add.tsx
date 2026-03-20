@@ -7,7 +7,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  Pressable,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSQLiteContext } from "expo-sqlite";
@@ -63,12 +65,13 @@ export default function AddBanknoteScreen() {
   const [notes, setNotes] = useState(
     params.notes ? decodeURIComponent(params.notes) : ""
   );
+  const [serialNumber, setSerialNumber] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [saving, setSaving] = useState(false);
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
 
   const hasUnsavedChanges = () => {
-    return !!(denomination.trim() || frontPhotoUri || backPhotoUri || yearStart.trim() || notes.trim());
+    return !!(denomination.trim() || frontPhotoUri || backPhotoUri || yearStart.trim() || notes.trim() || serialNumber.trim());
   };
 
   const handleBack = () => {
@@ -200,6 +203,7 @@ export default function AddBanknoteScreen() {
             : parseInt(yearEnd, 10),
         is_current: isCurrent ? 1 : 0,
         notes: notes.trim() || null,
+        serial_number: serialNumber.trim() || null,
       });
 
       if (milestones.length > 0) {
@@ -223,7 +227,17 @@ export default function AddBanknoteScreen() {
 
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
-      <Header title={t("banknote.addTitle")} showBack onBack={handleBack} />
+      <Header
+        title={t("banknote.addTitle")}
+        showBack
+        onBack={handleBack}
+        rightAction={
+          <Pressable onPress={handleSave} disabled={saving} className="flex-row items-center">
+            <Ionicons name="checkmark" size={20} color={saving ? COLORS.textMuted : COLORS.accent} />
+            <Text className="text-caption ml-xs" style={{ color: saving ? COLORS.textMuted : COLORS.accent }}>{t("banknote.save")}</Text>
+          </Pressable>
+        }
+      />
 
       <KeyboardAvoidingView
         className="flex-1"
@@ -308,6 +322,22 @@ export default function AddBanknoteScreen() {
                 yearStart: errors.yearStart,
                 yearEnd: errors.yearEnd,
               }}
+            />
+          </View>
+
+          {/* Serial Number */}
+          <View className="mb-lg">
+            <Text className="text-caption text-text-secondary mb-xs">
+              {t("banknote.serialNumber")}
+            </Text>
+            <TextInput
+              value={serialNumber}
+              onChangeText={setSerialNumber}
+              placeholder={t("banknote.serialNumberPlaceholder")}
+              placeholderTextColor={COLORS.textMuted}
+              autoCapitalize="characters"
+              className="h-12 bg-surface rounded-md px-md text-text-primary text-body"
+              style={{ borderWidth: 1, borderColor: COLORS.border }}
             />
           </View>
 

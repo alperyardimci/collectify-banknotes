@@ -164,6 +164,20 @@ export default function BanknoteDetailScreen() {
             </View>
           </View>
 
+          {/* Serial Number */}
+          {banknote.serial_number && (
+            <View className="bg-surface rounded-lg p-md mb-md">
+              <View className="flex-row justify-between">
+                <Text className="text-caption text-text-secondary">
+                  {t("banknote.serialNumber")}
+                </Text>
+                <Text className="text-body text-text-primary font-mono">
+                  {banknote.serial_number}
+                </Text>
+              </View>
+            </View>
+          )}
+
           {/* Notes */}
           {banknote.notes && (
             <View className="bg-surface rounded-lg p-md mb-md">

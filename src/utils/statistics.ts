@@ -14,8 +14,9 @@ export function getCollectionAge(banknotes: BanknoteRow[]): number {
 }
 
 export function getContinentDistribution(
-  banknotes: BanknoteRow[]
-): { continentId: string; nameKey: string; emoji: string; count: number }[] {
+  banknotes: BanknoteRow[],
+  countryStats?: Record<string, number>
+): { continentId: string; nameKey: string; emoji: string; count: number; collected: number; total: number }[] {
   const countryToContinentMap = new Map<string, string>();
   for (const continent of CONTINENTS) {
     for (const code of continent.countryCodes) {
@@ -29,12 +30,23 @@ export function getContinentDistribution(
     counts.set(cid, (counts.get(cid) || 0) + 1);
   }
 
-  return CONTINENTS.map((c) => ({
-    continentId: c.id,
-    nameKey: c.nameKey,
-    emoji: c.emoji,
-    count: counts.get(c.id) || 0,
-  }));
+  return CONTINENTS.map((c) => {
+    let collected = 0;
+    const total = c.id === "other" ? 0 : c.countryCodes.length;
+    if (countryStats && c.id !== "other") {
+      for (const code of c.countryCodes) {
+        if (countryStats[code] && countryStats[code] > 0) collected++;
+      }
+    }
+    return {
+      continentId: c.id,
+      nameKey: c.nameKey,
+      emoji: c.emoji,
+      count: counts.get(c.id) || 0,
+      collected,
+      total,
+    };
+  });
 }
 
 export function getTopDenominations(
@@ -52,6 +64,27 @@ export function getTopDenominations(
     }
   }
   return Array.from(map.values())
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit);
+}
+
+export function getSerialPrefixStats(
+  banknotes: BanknoteRow[],
+  limit = 5
+): { prefix: string; count: number }[] {
+  const map = new Map<string, number>();
+  for (const b of banknotes) {
+    if (b.serial_number && b.serial_number.trim()) {
+      // Extract all leading letters as the series prefix
+      const match = b.serial_number.trim().match(/^([A-Za-z]+)/);
+      if (match) {
+        const prefix = match[1].toUpperCase();
+        map.set(prefix, (map.get(prefix) || 0) + 1);
+      }
+    }
+  }
+  return Array.from(map.entries())
+    .map(([prefix, count]) => ({ prefix, count }))
     .sort((a, b) => b.count - a.count)
     .slice(0, limit);
 }

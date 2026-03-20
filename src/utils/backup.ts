@@ -16,6 +16,7 @@ interface BackupBanknote {
   year_end: number | null;
   is_current: number;
   notes: string | null;
+  serial_number?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -84,6 +85,7 @@ export async function exportBackup(
       year_end: bn.year_end,
       is_current: bn.is_current,
       notes: bn.notes,
+      serial_number: bn.serial_number,
       created_at: bn.created_at,
       updated_at: bn.updated_at,
     });
@@ -208,8 +210,8 @@ export async function importBackup(
     }
 
     db.runSync(
-      `INSERT INTO banknotes (country_code, denomination, currency, front_photo, back_photo, year_start, year_end, is_current, notes, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO banknotes (country_code, denomination, currency, front_photo, back_photo, year_start, year_end, is_current, notes, serial_number, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         bn.country_code,
         bn.denomination,
@@ -220,6 +222,7 @@ export async function importBackup(
         bn.year_end,
         bn.is_current,
         bn.notes,
+        bn.serial_number ?? null,
         bn.created_at,
         bn.updated_at,
       ]

@@ -13,6 +13,7 @@ export function initDatabase(db: SQLiteDatabase): void {
       year_end INTEGER,
       is_current INTEGER DEFAULT 0,
       notes TEXT,
+      serial_number TEXT,
       created_at TEXT DEFAULT (datetime('now')),
       updated_at TEXT DEFAULT (datetime('now'))
     );
@@ -20,6 +21,12 @@ export function initDatabase(db: SQLiteDatabase): void {
   db.execSync(`
     CREATE INDEX IF NOT EXISTS idx_banknotes_country_code ON banknotes (country_code);
   `);
+  // Migration: add serial_number column if it doesn't exist
+  try {
+    db.runSync("ALTER TABLE banknotes ADD COLUMN serial_number TEXT");
+  } catch {
+    // Column already exists
+  }
   db.execSync(`
     CREATE TABLE IF NOT EXISTS achievements (
       id TEXT PRIMARY KEY,

@@ -18,6 +18,7 @@ import {
   getContinentDistribution,
   getTopDenominations,
   getRecentActivity,
+  getSerialPrefixStats,
   formatRelativeTime,
   getCountryNameForBanknote,
 } from "@/utils/statistics";
@@ -35,8 +36,9 @@ export default function StatisticsScreen() {
   const [exportLoading, setExportLoading] = useState(false);
 
   const collectionAge = getCollectionAge(banknotes);
-  const continentDist = getContinentDistribution(banknotes);
+  const continentDist = getContinentDistribution(banknotes, countryStats);
   const topDenoms = getTopDenominations(banknotes);
+  const serialStats = getSerialPrefixStats(banknotes);
   const recent = getRecentActivity(banknotes);
   const maxContinentCount = Math.max(...continentDist.map((c) => c.count), 1);
   const uniqueCountries = Object.keys(countryStats).length;
@@ -134,31 +136,30 @@ export default function StatisticsScreen() {
           {t("statistics.continentDistribution")}
         </Text>
         <View className="bg-surface rounded-lg p-md mb-lg">
-          {continentDist.map((item) => (
-            <View key={item.continentId} className="flex-row items-center mb-sm">
-              <View className="w-8 items-center">
-                <EmojiImage emoji={item.emoji} size={18} />
+          {continentDist.filter((c) => c.continentId !== "other" || c.count > 0).map((item) => {
+            const pct = item.total > 0 ? Math.round((item.collected / item.total) * 100) : 0;
+            return (
+              <View key={item.continentId} className="flex-row items-center mb-sm">
+                <View className="w-8 items-center">
+                  <EmojiImage emoji={item.emoji} size={18} />
+                </View>
+                <Text className="text-caption text-text-secondary w-20" numberOfLines={1}>
+                  {t(item.nameKey)}
+                </Text>
+                <View className="flex-1 h-4 bg-surface-light rounded-full mx-sm overflow-hidden">
+                  <View
+                    className="h-full bg-accent rounded-full"
+                    style={{
+                      width: `${item.total > 0 ? Math.max(pct, item.collected > 0 ? 3 : 0) : 0}%`,
+                    }}
+                  />
+                </View>
+                <Text className="text-caption text-accent w-12 text-right">
+                  {item.total > 0 ? `${pct}%` : item.count}
+                </Text>
               </View>
-              <Text className="text-caption text-text-secondary w-24" numberOfLines={1}>
-                {t(item.nameKey)}
-              </Text>
-              <View className="flex-1 h-4 bg-surface-light rounded-full mx-sm overflow-hidden">
-                <View
-                  className="h-full bg-accent rounded-full"
-                  style={{
-                    width: `${
-                      item.count > 0
-                        ? Math.max((item.count / maxContinentCount) * 100, 5)
-                        : 0
-                    }%`,
-                  }}
-                />
-              </View>
-              <Text className="text-caption text-text-primary w-8 text-right">
-                {item.count}
-              </Text>
-            </View>
-          ))}
+            );
+          })}
         </View>
 
         {/* Top Denominations */}
@@ -179,6 +180,35 @@ export default function StatisticsScreen() {
                     </Text>
                     <Text className="text-body text-text-primary">
                       {item.denomination} {item.currency}
+                    </Text>
+                  </View>
+                  <Text className="text-caption text-accent">
+                    x{item.count}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </>
+        )}
+
+        {/* Serial Number Stats */}
+        {serialStats.length > 0 && (
+          <>
+            <Text className="text-h3 text-text-primary mb-md">
+              {t("statistics.serialStats")}
+            </Text>
+            <View className="bg-surface rounded-lg p-md mb-lg">
+              {serialStats.map((item, idx) => (
+                <View
+                  key={item.prefix}
+                  className="flex-row items-center justify-between mb-sm"
+                >
+                  <View className="flex-row items-center">
+                    <Text className="text-caption text-text-muted w-6">
+                      #{idx + 1}
+                    </Text>
+                    <Text className="text-body text-text-primary">
+                      {t("statistics.serialSeries", { letter: item.prefix })}
                     </Text>
                   </View>
                   <Text className="text-caption text-accent">

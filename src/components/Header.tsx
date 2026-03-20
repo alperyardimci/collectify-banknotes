@@ -47,7 +47,7 @@ export function Header({ title, showBack = false, rightAction, onBack }: HeaderP
         {title}
       </Text>
       {rightAction ? (
-        <View className="w-11 h-11 items-center justify-center">
+        <View className="h-11 items-center justify-center min-w-[44px]">
           {rightAction}
         </View>
       ) : (
