@@ -36,8 +36,9 @@ export default function AccountScreen() {
     try {
       await exportBackup(db, setSyncStatus);
     } catch (e: any) {
+      console.error("Export error:", e);
       if (e?.message !== "cancelled") {
-        Alert.alert(t("common.error"), t("account.exportError"));
+        Alert.alert(t("common.error"), t("account.exportError") + (e?.message ? `\n\n${e.message}` : ""));
       }
     } finally {
       setLoading(false);

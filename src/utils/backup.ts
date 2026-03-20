@@ -1,5 +1,4 @@
 import { File, Paths } from "expo-file-system/next";
-import { writeAsStringAsync, EncodingType } from "expo-file-system/legacy";
 import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
 import type { SQLiteDatabase } from "expo-sqlite";
@@ -37,19 +36,16 @@ interface BackupFile {
 }
 
 async function photoToBase64(uri: string): Promise<string> {
+  if (!uri || uri === "") return "";
   try {
     const file = new File(uri);
     if (file.exists) {
       return await file.base64();
     }
-  } catch {}
+  } catch (e) {
+    console.warn("Failed to read photo:", uri, e);
+  }
   return "";
-}
-
-async function writeBase64ToFile(base64: string, filePath: string): Promise<void> {
-  await writeAsStringAsync(filePath, base64, {
-    encoding: EncodingType.Base64,
-  });
 }
 
 export async function exportBackup(
@@ -61,12 +57,23 @@ export async function exportBackup(
   const banknotes = getAllBanknotes(db);
   const customCountries = getAllCustomCountries(db);
 
-  onProgress?.("Preparing photos...");
+  onProgress?.(`Preparing ${banknotes.length} banknotes...`);
 
   const backupBanknotes: BackupBanknote[] = [];
-  for (const bn of banknotes) {
-    const frontBase64 = await photoToBase64(bn.front_photo);
-    const backBase64 = bn.back_photo ? await photoToBase64(bn.back_photo) : null;
+  for (let i = 0; i < banknotes.length; i++) {
+    const bn = banknotes[i];
+    onProgress?.(`Photo ${i + 1}/${banknotes.length}...`);
+
+    let frontBase64 = "";
+    let backBase64: string | null = null;
+
+    try {
+      frontBase64 = await photoToBase64(bn.front_photo);
+    } catch {}
+    try {
+      backBase64 = bn.back_photo ? await photoToBase64(bn.back_photo) : null;
+    } catch {}
+
     backupBanknotes.push({
       country_code: bn.country_code,
       denomination: bn.denomination,
@@ -97,15 +104,19 @@ export async function exportBackup(
 
   onProgress?.("Creating file...");
 
+  // Use async write for large files
   const json = JSON.stringify(backup);
-  const file = new File(Paths.cache, "collectify-backup.json");
-  file.write(json);
+  const exportFile = new File(Paths.cache, "collectify-backup.json");
+  try {
+    if (exportFile.exists) exportFile.delete();
+  } catch {}
+  exportFile.create();
+  exportFile.write(json);
 
   onProgress?.("Sharing...");
-  await Sharing.shareAsync(file.uri, {
+  await Sharing.shareAsync(exportFile.uri, {
     mimeType: "application/json",
     dialogTitle: "Export Collectify Backup",
-    UTI: "public.json",
   });
 }
 
@@ -114,7 +125,7 @@ export async function importBackup(
   onProgress?: (msg: string) => void
 ): Promise<{ banknoteCount: number; countryCount: number }> {
   const result = await DocumentPicker.getDocumentAsync({
-    type: "application/json",
+    type: ["application/json", "public.json", "*/*"],
     copyToCacheDirectory: true,
   });
 
@@ -126,7 +137,12 @@ export async function importBackup(
 
   const file = new File(result.assets[0].uri);
   const content = await file.text();
-  const backup: BackupFile = JSON.parse(content);
+  let backup: BackupFile;
+  try {
+    backup = JSON.parse(content);
+  } catch {
+    throw new Error("invalid");
+  }
 
   if (backup.app !== "collectify-banknotes" || !backup.banknotes) {
     throw new Error("invalid");
@@ -141,29 +157,54 @@ export async function importBackup(
 
   onProgress?.("Restoring banknotes...");
 
-  // Clear existing
   db.runSync("DELETE FROM banknotes");
 
   const photoDir = PHOTO_DIR_PATH();
 
-  for (const bn of backup.banknotes) {
+  for (let i = 0; i < backup.banknotes.length; i++) {
+    const bn = backup.banknotes[i];
+    onProgress?.(`Banknote ${i + 1}/${backup.banknotes.length}...`);
+
     let frontPhotoUri = "";
     let backPhotoUri: string | null = null;
 
     if (bn.front_photo_base64) {
-      ensurePhotoDir();
-      const filename = `import_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.jpg`;
-      const filePath = `${photoDir}/${filename}`;
-      await writeBase64ToFile(bn.front_photo_base64, filePath);
-      frontPhotoUri = filePath;
+      try {
+        ensurePhotoDir();
+        const filename = `import_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.jpg`;
+        const photoFile = new File(Paths.document, "banknote-photos", filename);
+        photoFile.create();
+
+        // Decode base64 to bytes and write
+        const bytes = Uint8Array.from(atob(bn.front_photo_base64), (c) => c.charCodeAt(0));
+        const stream = photoFile.writableStream();
+        const writer = stream.getWriter();
+        await writer.write(bytes);
+        await writer.close();
+
+        frontPhotoUri = photoFile.uri;
+      } catch (e) {
+        console.warn("Failed to restore front photo:", e);
+      }
     }
 
     if (bn.back_photo_base64) {
-      ensurePhotoDir();
-      const filename = `import_${Date.now()}_${Math.random().toString(36).slice(2, 8)}_back.jpg`;
-      const filePath = `${photoDir}/${filename}`;
-      await writeBase64ToFile(bn.back_photo_base64, filePath);
-      backPhotoUri = filePath;
+      try {
+        ensurePhotoDir();
+        const filename = `import_${Date.now()}_${Math.random().toString(36).slice(2, 8)}_back.jpg`;
+        const photoFile = new File(Paths.document, "banknote-photos", filename);
+        photoFile.create();
+
+        const bytes = Uint8Array.from(atob(bn.back_photo_base64), (c) => c.charCodeAt(0));
+        const stream = photoFile.writableStream();
+        const writer = stream.getWriter();
+        await writer.write(bytes);
+        await writer.close();
+
+        backPhotoUri = photoFile.uri;
+      } catch (e) {
+        console.warn("Failed to restore back photo:", e);
+      }
     }
 
     db.runSync(
